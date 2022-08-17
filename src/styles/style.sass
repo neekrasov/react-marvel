@@ -8,6 +8,10 @@
     padding: 0
     box-sizing: border-box
 
+body
+    background: url("../img/ep_naturalblack.webp")
+
+
 ul,
 li,
 dl
@@ -47,9 +51,14 @@ input::-webkit-inner-spin-button
     position: relative
     .bg-decoration
         position: absolute
-        right: -174px
-        bottom: -70px
         z-index: -1
+        &.iron-man
+            left: 800px
+            bottom: -70px
+        &.captain-marvel
+            position: absolute
+            left: -500px
+            bottom: 150px
 
 main
     margin-top: 50px
