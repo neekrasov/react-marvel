@@ -8,6 +8,7 @@ export default class MarvelAPI {
 
     _transformResponse = (response) => {
         return {
+            id: response.id,
             charName: response.name,
             charDescription: response.description,
             charPreview: response.thumbnail.path + '.' + response.thumbnail.extension,
