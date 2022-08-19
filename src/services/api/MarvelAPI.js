@@ -13,7 +13,8 @@ export default class MarvelAPI {
             charDescription: response.description,
             charPreview: response.thumbnail.path + '.' + response.thumbnail.extension,
             homepageLink: response.urls[0].url,
-            wikiLink: response.urls[1].url
+            wikiLink: response.urls[1].url,
+            comics: response.comics.items.length > 10? response.comics.items.slice(0, 10) : response.comics.items,
         }
     }
 
