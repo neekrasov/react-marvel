@@ -16,6 +16,7 @@ class RandomChar extends Component{
 
     setRandomChar = () =>{
         const id = Math.floor(Math.random() * (1011334 - 1009742) + 1009742);
+        this.setState({isLoaded: false, isError: false})
         new MarvelAPI()
             .getCharacter(id)
             .then((char)=>this.setState({char, isLoaded: true, isError: false}))
@@ -60,7 +61,6 @@ const CharacterView = ({charPreview, charName, charDescription, homepageLink, wi
     charDescription = (charDescription)? charDescription : 'Information about this character will be later!';
     charDescription = charDescription.length > 220?  charDescription.slice(0, 220)+"..." : charDescription;
     let charPreviewStyle = charPreview === "http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg"? {'object-fit': "contain"} : null
-    console.log(charPreviewStyle)
     return (
         <div className="randomchar__block">
             <img src={charPreview} alt="Random character" className="randomchar__img" style={charPreviewStyle}/>
