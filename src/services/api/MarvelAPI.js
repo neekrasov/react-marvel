@@ -2,7 +2,7 @@ export default class MarvelAPI {
     _apiBaseURL ='http://gateway.marvel.com/v1/public/';
     _apiKey ='apikey=515c4f46b9ee3419f3020f0655af98bc';
     _limitCharacters ='limit=9&';
-    _offsetCharacters = 'offset=300&';
+    _offsetCharacters = 'offset={}&';
     _allCharactersURI = 'characters?';
     _singleCharacterURI = `characters/{}?`;
 
@@ -25,8 +25,8 @@ export default class MarvelAPI {
         return await response.json();
     }
 
-    getAllCharacters = async () =>{
-        const response = await this.get(this._apiBaseURL + this._allCharactersURI + this._limitCharacters + this._offsetCharacters, this._apiKey);
+    getAllCharacters = async (offset = 301) =>{
+        const response = await this.get(this._apiBaseURL + this._allCharactersURI + this._limitCharacters + this._offsetCharacters.replace('{}', offset), this._apiKey);
         return response.data.results.map(this._transformResponse)
     } 
     
