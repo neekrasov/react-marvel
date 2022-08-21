@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import MarvelAPI from "../../services/api/MarvelAPI";
+import {useMarvelAPI} from "../../services/api/MarvelAPI";
 import './CharacterInfo.sass';
 import LoadSpinner from "../LoadSpinner/LoadSpinner";
 import ErrorMessage from "../ErrorMessage/ErrorMessage";
@@ -8,28 +8,14 @@ import Skeletn from "../Skeletn/Skeletn";
 
 const CharInfo = ({selectedChar}) => {
     const [char, setChar] = useState(null);
-    const [isLoaded, setLoadedStatus] = useState(false);
-    const [isError, setErrorStatus] = useState(false);
+    const {isLoaded, isError, getCharacter} = useMarvelAPI();
 
     useEffect(()=>{
-        if (selectedChar === 0) {
-            setLoadedStatus(true);
-            return;
-        }
-        setLoadedStatus(false)
-        new MarvelAPI()
-                .getCharacter(selectedChar)
-                .then(result => {;
-                    setChar(result);
-                    setLoadedStatus(true);
-                }).catch(()=>{
-                    setLoadedStatus(true);
-                    setErrorStatus(true);
-                })
+        getCharacter(selectedChar).then(result => setChar(result));
     }, [selectedChar])
 
-    const errorMessage = isError ? <ErrorMessage/> : null;
-    const loadSpinner = !isLoaded ? <LoadSpinner/> : null;
+    const errorMessage = isError && char? <ErrorMessage style ={{width: "370px", height: "260px"}}/> : null;
+    const loadSpinner = !isLoaded && char? <LoadSpinner/> : null;
     const skeletn = loadSpinner || errorMessage || char ? null: <Skeletn/>;
     const content = !(loadSpinner || errorMessage || !char) ? <CharInfoView {...char}/> : null;
 

@@ -1,61 +1,45 @@
-import './CharacterRandom.sass';
-import mjolnir from '../../img/mjolnir.png';
-import MarvelAPI from '../../services/api/MarvelAPI';
-import {Component} from 'react';
+import {useEffect, useState} from 'react';
+import {useMarvelAPI} from '../../services/api/MarvelAPI';
 import LoadSpinner from '../LoadSpinner/LoadSpinner';
 import ErrorMessage from '../ErrorMessage/ErrorMessage'
+import './CharacterRandom.sass';
+import mjolnir from '../../img/mjolnir.png';
 
-// Without hooks
+const RandomChar = () => {
+    const [char, setChar] = useState(null);
+    const {isLoaded, isError, getCharacter, clearError} = useMarvelAPI();
 
-class RandomChar extends Component{
-    state={
-        char: {},
-        isLoaded: false,
-        isError: false,
-    }
+    useEffect(()=>{
+        clearError();
+        setRandomChar()}, [])
 
-    setRandomChar = () =>{
-        const id = Math.floor(Math.random() * (1011334 - 1009742) + 1009742);
-        this.setState({isLoaded: false, isError: false})
-        new MarvelAPI()
-            .getCharacter(id)
-            .then((char)=>this.setState({char, isLoaded: true, isError: false}))
-            .catch(()=>this.setState({char: {}, isError: true, isLoaded: true}))
-    } 
+    const setRandomChar = () => getCharacter(Math.floor(Math.random() * (1011334 - 1009742) + 1009742)).then(char=>setChar(char));
     
-    componentDidMount() {
-         this.setRandomChar();
-    }
-    
-    render() {
-        const loadSpinner = !this.state.isLoaded? <LoadSpinner/> : null;
-        const errorMessage = this.state.isError? <ErrorMessage/>: null;
-        const characterView = !(loadSpinner || errorMessage) ? <CharacterView {...this.state.char}/> : null;
-        return (
-                <div className="randomchar">
-                        {errorMessage}
-                        {loadSpinner}
-                        {characterView}
-                    <div className="randomchar__static">
-                        <p className="randomchar__title">
-                            Random character for today!<br/>
-                            Do you want to get to know him better?
-                        </p>
-                        <p className="randomchar__title">
-                            Or choose another one
-                        </p>
-                        <button onClick={this.setRandomChar} className="button button__main">
-                            <div className="inner">try it</div>
-                        </button>
-                        <img src={mjolnir} alt="mjolnir" className="randomchar__decoration"/>
-                    </div>
+    const loadSpinner = !isLoaded? <LoadSpinner/> : null;
+    const errorMessage = isError? <ErrorMessage style ={{width: "550px", height: "260px"}}/>: null;
+    const characterView = !(loadSpinner || errorMessage) ? <CharacterView {...char}/> : null;
+    return (
+            <div className="randomchar">
+                    {errorMessage}
+                    {loadSpinner}
+                    {characterView}
+                <div className="randomchar__static">
+                    <p className="randomchar__title">
+                        Random character for today!<br/>
+                        Do you want to get to know him better?
+                    </p>
+                    <p className="randomchar__title">
+                        Or choose another one
+                    </p>
+                    <button onClick={setRandomChar} className="button button__main">
+                        <div className="inner">try it</div>
+                    </button>
+                    <img src={mjolnir} alt="mjolnir" className="randomchar__decoration"/>
                 </div>
-        )
-    }
+            </div>
+    )
     
 }
-
-//Dinamic element.
 
 const CharacterView = ({charPreview, charName, charDescription, homepageLink, wikiLink}) => {
     charDescription = (charDescription)? charDescription : 'Information about this character will be later!';

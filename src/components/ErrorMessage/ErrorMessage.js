@@ -1,7 +1,7 @@
 import gif from './error.gif'
-const ErrorMessage = () => {
+const ErrorMessage = ({style}) => {
     return (
-        <img style={{width: "550px", height: "260px"}} src={gif} alt="error" />
+        <img style={style} src={gif} alt="error" />
     )
 }
 

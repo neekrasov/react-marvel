@@ -1,43 +1,34 @@
 import { useState, useEffect, useRef } from 'react';
-import MarvelAPI from '../../services/api/MarvelAPI';
+import { useMarvelAPI } from '../../services/api/MarvelAPI';
 import ErrorMessage from '../ErrorMessage/ErrorMessage';
 import LoadSpinner from '../LoadSpinner/LoadSpinner';
 import './CharacterList.sass';
 
 const CharList = ({onCharSelected}) => {
     const [chars, setChars] = useState([]);
-    const [isLoaded, setLoadedStatus] = useState(false);
-    const [isError, setErrorStatus] = useState(false);
+    const {isLoaded, isError, getAllCharacters} = useMarvelAPI();
     const [dataUpload, setDataUploadStatus] = useState(false);
     const [dataOffset, setDataOffset] = useState(301);
     const [lastCharacter, setLastCharacterStatus] = useState(false)
 
+    useEffect(()=>onLoadCharacters(dataOffset, true), [])
 
-    useEffect(()=>{
-        onLoadCharacters();
-    }, [])
-
-    const onLoadCharacters = (offset) => {
-        const api = new MarvelAPI();
-        setDataUploadStatus(true);
-        api.getAllCharacters(offset).then(result => {
-            setLoadedStatus(true);
+    const onLoadCharacters = (offset, init) => {
+        init? setDataUploadStatus(false): setDataUploadStatus(true)
+        
+        getAllCharacters(offset).then(result => {
             if (result.length === 0){
                 setLastCharacterStatus(true);
                 return;
             }
             setChars([...chars, ...result]);
-            setErrorStatus(false);
-            setDataUploadStatus(false)
-            setDataOffset(dataOffset + 9)
-        }).catch(()=>{
-            setLoadedStatus(false);
-            setErrorStatus(true);
+            setDataOffset(dataOffset + 9);
+            setDataUploadStatus(false);
         })
     }
     const loadButtonStyle = lastCharacter? {display: 'none'} : null
     const errorMessage = isError ? <ErrorMessage/> : null;
-    const loadSpinner = !isLoaded ? <><li/><LoadSpinner/><li/></> : null;
+    const loadSpinner = !isLoaded &&  !dataUpload? <><li/><LoadSpinner/><li/></> : null;
     const charListItems = !(loadSpinner || errorMessage) ? chars.map((char) =>
                                                     <CharacterListItem onCharSelected = {onCharSelected}
                                                                         key={char.id}
@@ -69,8 +60,7 @@ const CharacterListItem = ({onCharSelected, charPreview, charName, id}) => {
         <li ref={itemRef} 
             onClick={()=> {
             onCharSelected(id);
-            setSelected();
-            }}
+            setSelected();}}
             className={`char__item`}
             tabIndex={0}>
             <img style = {charPreviewStyle} src={charPreview} alt="abyss"/>
