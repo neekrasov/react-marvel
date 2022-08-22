@@ -3,12 +3,18 @@ import { useHttp } from "../../hooks/http.hook";
 export const useMarvelAPI = () => {
     const _apiBaseURL ='http://gateway.marvel.com/v1/public/';
     const _apiKey ='apikey=515c4f46b9ee3419f3020f0655af98bc';
-    const _limitCharacters ='limit=9&';
-    const _offsetCharacters = 'offset={}&';
+
+    const _limitBase ='limit=9&';
+    const _offsetBase = 'offset={}&';
+
     const _allCharactersURI = 'characters?';
     const _singleCharacterURI = `characters/{}?`;
 
-    const _transformResponse = (response) => {
+    const _allComicsURI = 'comics?';
+    const _singleComicURI = `comics/{}?`;
+
+
+    const _transformCharacterResponse = (response) => {
         return {
             id: response.id,
             charName: response.name,
@@ -20,18 +26,41 @@ export const useMarvelAPI = () => {
         };
     }
 
+    const _transformComicsResponse = (response) => {
+        return {
+            id: response.id,
+            title: response.title,
+            description: response.description,
+            pageCount: response.pageCount,
+            language: response.textObjects.length !==0? response.textObjects[0].language : null,
+            price: response.prices[0].price,
+            thumbnail: response.thumbnail.path + '.' + response.thumbnail.extension,
+        };
+    }
+
     const {isLoaded, isError, request, clearError} = useHttp();
 
     const getAllCharacters = async (offset = 301) =>{
-        const response = await request(_apiBaseURL + _allCharactersURI + _limitCharacters + _offsetCharacters.replace('{}', offset)+ _apiKey);
-        return response.data.results.map(_transformResponse)
+        const response = await request(_apiBaseURL + _allCharactersURI + _limitBase + _offsetBase.replace('{}', offset)+ _apiKey);
+        return response.data.results.map(_transformCharacterResponse)
     } 
     
     const getCharacter = async (id) =>  {
         const response = await request(_apiBaseURL + _singleCharacterURI.replace("{}", id)+ _apiKey);
-        return _transformResponse(response.data.results[0])
+        return _transformCharacterResponse(response.data.results[0])
     }
 
-    return {isLoaded, isError, getCharacter, getAllCharacters, clearError}
+    
+    const getAllComics= async (offset = 200) =>{
+        const response = await request(_apiBaseURL + _allComicsURI + _limitBase.replace(9, 8) + _offsetBase.replace('{}', offset)+ _apiKey);
+        return response.data.results.map(_transformComicsResponse)
+    } 
+    
+    const getComic = async (id) =>  {
+        const response = await request(_apiBaseURL + _singleComicURI.replace("{}", id)+ _apiKey);
+        return _transformComicsResponse(response.data.results[0])
+    }
+
+    return {isLoaded, isError, clearError, getCharacter, getAllCharacters, getAllComics, getComic}
 
 }

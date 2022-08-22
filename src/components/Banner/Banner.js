@@ -1,11 +1,11 @@
 import './Banner.sass';
-import avengers from '../../img/Avengers.png';
-import avengersLogo from '../../img/Avengers_logo.png';
+import avengers from '../../img/avengers.png';
+import avengersLogo from '../../img/avengers_logo.png';
 
-const AppBanner = () => {
+const Banner = () => {
     return (
         <div className="app__banner">
-            <img src={avengers} alt="Avengers"/>
+            <img src={avengers} alt="avengers"/>
             <div className="app__banner-text">
                 New comics every week!<br/>
                 Stay tuned!
@@ -15,4 +15,4 @@ const AppBanner = () => {
     )
 }
 
-export default AppBanner;
+export default Banner;
