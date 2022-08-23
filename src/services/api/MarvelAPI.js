@@ -1,7 +1,7 @@
 import { useHttp } from "../../hooks/http.hook";
 
 export const useMarvelAPI = () => {
-    const _apiBaseURL ='http://gateway.marvel.com/v1/public/';
+    const _apiBaseURL ='https://gateway.marvel.com:443/v1/public/';
     const _apiKey ='apikey=515c4f46b9ee3419f3020f0655af98bc';
 
     const _limitBase ='limit=9&';
@@ -33,7 +33,7 @@ export const useMarvelAPI = () => {
             description: response.description,
             pageCount: response.pageCount,
             language: response.textObjects.length !==0? response.textObjects[0].language : null,
-            price: response.prices[0].price,
+            price: response.prices[0].price === 0? "NOT AVAILABLE": response.prices[0].price,
             thumbnail: response.thumbnail.path + '.' + response.thumbnail.extension,
         };
     }

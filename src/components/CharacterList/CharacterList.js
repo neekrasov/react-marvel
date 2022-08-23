@@ -4,7 +4,7 @@ import ErrorMessage from '../ErrorMessage/ErrorMessage';
 import LoadSpinner from '../LoadSpinner/LoadSpinner';
 import './CharacterList.sass';
 
-const CharList = ({onCharSelected}) => {
+const CharList = ({onCharSelected, scrollRef}) => {
     const [chars, setChars] = useState([]);
     const {isLoaded, isError, getAllCharacters} = useMarvelAPI();
     const [dataUpload, setDataUploadStatus] = useState(false);
@@ -30,7 +30,8 @@ const CharList = ({onCharSelected}) => {
     const errorMessage = isError ? <ErrorMessage/> : null;
     const loadSpinner = !isLoaded &&  !dataUpload? <><li/><LoadSpinner/><li/></> : null;
     const charListItems = !(loadSpinner || errorMessage) ? chars.map((char) =>
-                                                    <CharacterListItem onCharSelected = {onCharSelected}
+                                                    <CharacterListItem  onCharSelected = {onCharSelected}
+                                                                        scrollRef ={scrollRef}
                                                                         key={char.id}
                                                                         {...char}/>) : null;
 
@@ -52,15 +53,20 @@ const CharList = ({onCharSelected}) => {
     )
 }
 
-const CharacterListItem = ({onCharSelected, charPreview, charName, id}) => {
-    const itemRef = useRef(null)
+const CharacterListItem = ({scrollRef, onCharSelected, charPreview, charName, id}) => {
+    const itemRef = useRef(null);
+    const scrollToRef = () => scrollRef.current.scrollIntoView();
     const setSelected = () => itemRef.current.focus();
-    let charPreviewStyle = charPreview === "http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg"? {objectFit: "contain"} : null
+    let charPreviewStyle = charPreview === "http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg"? {objectFit: "contain"} : null;
     return (
         <li ref={itemRef} 
+
             onClick={()=> {
-            onCharSelected(id);
-            setSelected();}}
+                onCharSelected(id);
+                setSelected();
+                scrollToRef();
+            }}
+
             className={`char__item`}
             tabIndex={0}>
             <img style = {charPreviewStyle} src={charPreview} alt="abyss"/>

@@ -1,25 +1,30 @@
-import {useEffect, useState} from 'react';
+import {useEffect, useState, useRef} from 'react';
 import {useMarvelAPI} from '../../services/api/MarvelAPI';
 import LoadSpinner from '../LoadSpinner/LoadSpinner';
 import ErrorMessage from '../ErrorMessage/ErrorMessage'
 import './CharacterRandom.sass';
 import mjolnir from '../../img/mjolnir.png';
 
-const RandomChar = () => {
+const RandomChar = ({setScrollRef}) => {
+    const ref = useRef();
     const [char, setChar] = useState(null);
     const {isLoaded, isError, getCharacter, clearError} = useMarvelAPI();
 
     useEffect(()=>{
         clearError();
-        setRandomChar()}, [])
+        setRandomChar();
+        setScrollRef(ref);
+    }, [])
 
     const setRandomChar = () => getCharacter(Math.floor(Math.random() * (1011334 - 1009742) + 1009742)).then(char=>setChar(char));
     
     const loadSpinner = !isLoaded? <LoadSpinner/> : null;
     const errorMessage = isError? <ErrorMessage style ={{width: "550px", height: "260px"}}/>: null;
     const characterView = !(loadSpinner || errorMessage) ? <CharacterView {...char}/> : null;
+
+
     return (
-            <div className="randomchar">
+            <div ref ={ref} className="randomchar">
                     {errorMessage}
                     {loadSpinner}
                     {characterView}

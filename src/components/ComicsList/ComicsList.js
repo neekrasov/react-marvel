@@ -2,6 +2,7 @@ import './ComicsList.sass';
 import { useEffect, useState } from 'react';
 import { useMarvelAPI } from '../../services/api/MarvelAPI';
 import LoadSpinner from '../LoadSpinner/LoadSpinner';
+import { Link } from 'react-router-dom';
 
 const ComicsList = () => {
     const [comics, setComics] = useState([]);
@@ -29,15 +30,13 @@ const ComicsList = () => {
 
     const loadButtonStyle = lastComicsStatus? {display: 'none'} : null
     const loadSpinner = !isLoaded &&  !dataUpload? <div><LoadSpinner/></div> : null;
-    const comicsListItems = !(loadSpinner) ? comics.map((comic) =>
-                                                    <ComicsListItem key={comic.id}
+    const comicsListItems = !(loadSpinner) ? comics.map((comic, index) =>
+                                                    <ComicsListItem key={index}
                                                                     {...comic}/>) : null;
 
     return (
         <div className='comics__list'>
-            {loadSpinner? loadSpinner : <ul className="comics__grid">
-                {comicsListItems}
-            </ul> }
+            {loadSpinner? loadSpinner : <ul className="comics__grid"> {comicsListItems}</ul>}
             <button onClick={() => onLoadComics(dataOffset)} disabled = {dataUpload} style = {loadButtonStyle} className="button button__main button__long">
                 <div className="inner">load more</div>
             </button>
@@ -48,17 +47,14 @@ const ComicsList = () => {
 export default ComicsList;
 
 
-const ComicsListItem = ({title, price, thumbnail}) => {
-    if (price === 0) {
-        price = "not available";
-    }
+const ComicsListItem = ({title, price, thumbnail, id}) => {
     return (
         <li className="comics__item">
-            <a href="/#">
+            <Link to={`/comics/${id}`}>
                 <img src={thumbnail} alt="ultimate war" className="comics__item-img"/>
                 <div className="comics__item-name">{title}</div>
                 <div className="comics__item-price">{price}</div>
-            </a>
+            </Link>
         </li>
     )
 }

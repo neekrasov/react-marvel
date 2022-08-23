@@ -1,9 +1,10 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import {useMarvelAPI} from "../../services/api/MarvelAPI";
 import './CharacterInfo.sass';
 import LoadSpinner from "../LoadSpinner/LoadSpinner";
 import ErrorMessage from "../ErrorMessage/ErrorMessage";
 import Skeletn from "../Skeletn/Skeletn";
+import { Link } from "react-router-dom";
 
 
 const CharInfo = ({selectedChar}) => {
@@ -53,10 +54,10 @@ const CharInfoView = ({charName, charDescription, charPreview, homepageLink, wik
              {/* The amount of data in 10 pieces is limited by the MarvelAPI class */}
                 {comics.length !== 0? comics.map(({name, resourceURI}, i) =>{
                     return (
-                        <li className="char__comics-item"
+                        <Link to={`/comics/${resourceURI.split('/').slice(-1)[0]}`} className="char__comics-item"
                             key={i}>
-                            <a href={resourceURI}>{name}</a> 
-                        </li>
+                           {name}
+                        </Link>
                     )
                 }): <li>The list of comics for this character will appear later!</li>
             }
