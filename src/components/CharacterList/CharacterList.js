@@ -35,19 +35,11 @@ const CharList = ({onCharSelected, scrollRef}) => {
 
     return (
         <div className="char__list">
-            <Transition in={isLoaded} timeout={500}>
-                {state => 
-                    <ul 
-                    className="char__grid"
-                    style = {{
-                        ...transitionStyles[state]
-                    }}>
-                        {errorMessage}
-                        {loadSpinner}
-                        {charListItems}
-                    </ul>
-                }
-            </Transition>
+            <ul className="char__grid">
+                {errorMessage}
+                {loadSpinner}
+                {charListItems}
+            </ul>
             <button 
             style ={loadButtonStyle}
             className="button button__main button__long"
@@ -60,25 +52,34 @@ const CharList = ({onCharSelected, scrollRef}) => {
 }
 
 const CharacterListItem = ({scrollRef, onCharSelected, charPreview, charName, id}) => {
+    const [animationStatus, setAnimationStatus] = useState(false);
     const itemRef = useRef(null);
+    setTimeout(()=> setAnimationStatus(true), 50);
     const scrollToRef = () => scrollRef.current.scrollIntoView();
     const setSelected = () => itemRef.current.focus();
     let charPreviewStyle = charPreview === "http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg"? {objectFit: "contain"} : null;
 
     return (
-            <li 
-                ref={itemRef} 
-                onClick={()=> {
-                    onCharSelected(id);
-                    setSelected();
-                    scrollToRef();
-                }}
-                className={`char__item`}
-                tabIndex={0}>
+        <Transition in={animationStatus} timeout={500}>
+            {state =>
+                    <li 
+                        style = {{
+                            ...transitionStyles[state]
+                        }} 
+                        ref={itemRef} 
+                        onClick={()=> {
+                            onCharSelected(id);
+                            setSelected();
+                            scrollToRef();
+                        }}
+                        className={`char__item`}
+                        tabIndex={0}>
 
-                <img style = {charPreviewStyle} src={charPreview} alt="abyss"/>
-                <div className="char__name">{charName}</div>
-            </li>
+                        <img style = {charPreviewStyle} src={charPreview} alt="abyss"/>
+                        <div className="char__name">{charName}</div>
+                    </li>
+        }                     
+        </Transition>
     )
 }
 export default CharList;

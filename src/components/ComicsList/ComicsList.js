@@ -40,19 +40,7 @@ const ComicsList = () => {
 
     return (
         <div className='comics__list'>
-            {loadSpinner? loadSpinner :
-                <Transition in={isLoaded} timeout = {500}>
-                    {state =>                     
-                    <ul
-                        style = {{
-                            ...transitionStyles[state]
-                        }} 
-                        className="comics__grid"> 
-                        {comicsListItems}
-                    </ul>}
-
-                </Transition> 
-            }
+            {loadSpinner? loadSpinner : <ul className="comics__grid"> {comicsListItems}</ul>}
             <button onClick={() => onLoadComics(dataOffset)} disabled = {dataUpload} style = {loadButtonStyle} className="button button__main button__long">
                 <div className="inner">load more</div>
             </button>
@@ -64,13 +52,26 @@ export default ComicsList;
 
 
 const ComicsListItem = ({title, price, thumbnail, id}) => {
+
+    const [animationStatus, setAnimationStatus] = useState(false);
+    setTimeout(()=> setAnimationStatus(true), 50);
+
     return (
-            <li className="comics__item">
-                <Link to={`/comics/${id}`}>
-                    <img src={thumbnail} alt="ultimate war" className="comics__item-img"/>
-                    <div className="comics__item-name">{title}</div>
-                    <div className="comics__item-price">{price}</div>
-                </Link>
-            </li>
+        <Transition in={animationStatus} timeout={500}>
+            {state => 
+                <li 
+                className="comics__item"
+                style = {{
+                    ...transitionStyles[state]
+                }} >
+                    <Link to={`/comics/${id}`}>
+                        <img src={thumbnail} alt="ultimate war" className="comics__item-img"/>
+                        <div className="comics__item-name">{title}</div>
+                        <div className="comics__item-price">{price}</div>
+                    </Link>
+                </li>
+            }
+        </Transition>
+
     )
 }
