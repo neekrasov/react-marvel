@@ -1,5 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
+import { Transition } from 'react-transition-group';
 import { useMarvelAPI } from '../../services/api/MarvelAPI';
+import {transitionStyles} from '../../styles/transitionStyles';
 import ErrorMessage from '../ErrorMessage/ErrorMessage';
 import LoadSpinner from '../LoadSpinner/LoadSpinner';
 import './CharacterList.sass';
@@ -29,19 +31,23 @@ const CharList = ({onCharSelected, scrollRef}) => {
     const loadButtonStyle = lastCharacter? {display: 'none'} : null
     const errorMessage = isError ? <ErrorMessage/> : null;
     const loadSpinner = !isLoaded &&  !dataUpload? <><li/><LoadSpinner/><li/></> : null;
-    const charListItems = !(loadSpinner || errorMessage) ? chars.map((char) =>
-                                                    <CharacterListItem  onCharSelected = {onCharSelected}
-                                                                        scrollRef ={scrollRef}
-                                                                        key={char.id}
-                                                                        {...char}/>) : null;
+    const charListItems = chars.map((char) => <CharacterListItem onCharSelected = {onCharSelected} scrollRef = {scrollRef} key = {char.id} {...char} />);
 
     return (
         <div className="char__list">
-            <ul className="char__grid">
-                {errorMessage}
-                {loadSpinner}
-                {charListItems}
-            </ul>
+            <Transition in={isLoaded} timeout={500}>
+                {state => 
+                    <ul 
+                    className="char__grid"
+                    style = {{
+                        ...transitionStyles[state]
+                    }}>
+                        {errorMessage}
+                        {loadSpinner}
+                        {charListItems}
+                    </ul>
+                }
+            </Transition>
             <button 
             style ={loadButtonStyle}
             className="button button__main button__long"
@@ -58,20 +64,21 @@ const CharacterListItem = ({scrollRef, onCharSelected, charPreview, charName, id
     const scrollToRef = () => scrollRef.current.scrollIntoView();
     const setSelected = () => itemRef.current.focus();
     let charPreviewStyle = charPreview === "http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg"? {objectFit: "contain"} : null;
+
     return (
-        <li ref={itemRef} 
+            <li 
+                ref={itemRef} 
+                onClick={()=> {
+                    onCharSelected(id);
+                    setSelected();
+                    scrollToRef();
+                }}
+                className={`char__item`}
+                tabIndex={0}>
 
-            onClick={()=> {
-                onCharSelected(id);
-                setSelected();
-                scrollToRef();
-            }}
-
-            className={`char__item`}
-            tabIndex={0}>
-            <img style = {charPreviewStyle} src={charPreview} alt="abyss"/>
-            <div className="char__name">{charName}</div>
-        </li>
+                <img style = {charPreviewStyle} src={charPreview} alt="abyss"/>
+                <div className="char__name">{charName}</div>
+            </li>
     )
 }
 export default CharList;

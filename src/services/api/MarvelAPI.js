@@ -33,7 +33,7 @@ export const useMarvelAPI = () => {
             description: response.description,
             pageCount: response.pageCount,
             language: response.textObjects.length !==0? response.textObjects[0].language : null,
-            price: response.prices[0].price === 0? "NOT AVAILABLE": response.prices[0].price,
+            price: response.prices[0].price === 0? "NOT AVAILABLE": response.prices[0].price + "$",
             thumbnail: response.thumbnail.path + '.' + response.thumbnail.extension,
         };
     }
@@ -42,25 +42,25 @@ export const useMarvelAPI = () => {
 
     const getAllCharacters = async (offset = 301) =>{
         const response = await request(_apiBaseURL + _allCharactersURI + _limitBase + _offsetBase.replace('{}', offset)+ _apiKey);
-        return response.data.results.map(_transformCharacterResponse)
+        return response.data.results.map(_transformCharacterResponse);
     } 
     
     const getCharacter = async (id) =>  {
         const response = await request(_apiBaseURL + _singleCharacterURI.replace("{}", id)+ _apiKey);
-        return _transformCharacterResponse(response.data.results[0])
+        return _transformCharacterResponse(response.data.results[0]);
     }
 
     
     const getAllComics= async (offset = 200) =>{
         const response = await request(_apiBaseURL + _allComicsURI + _limitBase.replace(9, 8) + _offsetBase.replace('{}', offset)+ _apiKey);
-        return response.data.results.map(_transformComicsResponse)
+        return response.data.results.map(_transformComicsResponse);
     } 
     
     const getComic = async (id) =>  {
         const response = await request(_apiBaseURL + _singleComicURI.replace("{}", id)+ _apiKey);
-        return _transformComicsResponse(response.data.results[0])
+        return _transformComicsResponse(response.data.results[0]);
     }
 
-    return {isLoaded, isError, clearError, getCharacter, getAllCharacters, getAllComics, getComic}
+    return {isLoaded, isError, clearError, getCharacter, getAllCharacters, getAllComics, getComic};
 
 }

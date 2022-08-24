@@ -4,6 +4,8 @@ import LoadSpinner from '../LoadSpinner/LoadSpinner';
 import ErrorMessage from '../ErrorMessage/ErrorMessage'
 import './CharacterRandom.sass';
 import mjolnir from '../../img/mjolnir.png';
+import { Transition } from 'react-transition-group';
+import { transitionStyles } from '../../styles/transitionStyles';
 
 const RandomChar = ({setScrollRef}) => {
     const ref = useRef();
@@ -25,9 +27,19 @@ const RandomChar = ({setScrollRef}) => {
 
     return (
             <div ref ={ref} className="randomchar">
-                    {errorMessage}
-                    {loadSpinner}
-                    {characterView}
+                <Transition in={isLoaded} timeout={500}>
+                    {state=> 
+                            <div
+                            style = {{
+                                ...transitionStyles[state]
+                            }}>
+                                {errorMessage}
+                                {loadSpinner}
+                                {characterView}
+                            </div>
+                    }
+                </Transition>
+
                 <div className="randomchar__static">
                     <p className="randomchar__title">
                         Random character for today!<br/>

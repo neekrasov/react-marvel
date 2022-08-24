@@ -3,6 +3,8 @@ import { useEffect, useState } from 'react';
 import { useMarvelAPI } from '../../services/api/MarvelAPI';
 import LoadSpinner from '../LoadSpinner/LoadSpinner';
 import { Link } from 'react-router-dom';
+import { Transition } from 'react-transition-group';
+import { transitionStyles } from '../../styles/transitionStyles';
 
 const ComicsList = () => {
     const [comics, setComics] = useState([]);
@@ -32,11 +34,25 @@ const ComicsList = () => {
     const loadSpinner = !isLoaded &&  !dataUpload? <div><LoadSpinner/></div> : null;
     const comicsListItems = !(loadSpinner) ? comics.map((comic, index) =>
                                                     <ComicsListItem key={index}
-                                                                    {...comic}/>) : null;
+                                                    isLoaded = {isLoaded}
+                                                    dataUpload = {dataUpload}
+                                                    {...comic}/>) : null;
 
     return (
         <div className='comics__list'>
-            {loadSpinner? loadSpinner : <ul className="comics__grid"> {comicsListItems}</ul>}
+            {loadSpinner? loadSpinner :
+                <Transition in={isLoaded} timeout = {500}>
+                    {state =>                     
+                    <ul
+                        style = {{
+                            ...transitionStyles[state]
+                        }} 
+                        className="comics__grid"> 
+                        {comicsListItems}
+                    </ul>}
+
+                </Transition> 
+            }
             <button onClick={() => onLoadComics(dataOffset)} disabled = {dataUpload} style = {loadButtonStyle} className="button button__main button__long">
                 <div className="inner">load more</div>
             </button>
@@ -49,12 +65,12 @@ export default ComicsList;
 
 const ComicsListItem = ({title, price, thumbnail, id}) => {
     return (
-        <li className="comics__item">
-            <Link to={`/comics/${id}`}>
-                <img src={thumbnail} alt="ultimate war" className="comics__item-img"/>
-                <div className="comics__item-name">{title}</div>
-                <div className="comics__item-price">{price}</div>
-            </Link>
-        </li>
+            <li className="comics__item">
+                <Link to={`/comics/${id}`}>
+                    <img src={thumbnail} alt="ultimate war" className="comics__item-img"/>
+                    <div className="comics__item-name">{title}</div>
+                    <div className="comics__item-price">{price}</div>
+                </Link>
+            </li>
     )
 }

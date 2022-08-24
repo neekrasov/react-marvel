@@ -1,10 +1,12 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState} from "react";
 import {useMarvelAPI} from "../../services/api/MarvelAPI";
 import './CharacterInfo.sass';
 import LoadSpinner from "../LoadSpinner/LoadSpinner";
 import ErrorMessage from "../ErrorMessage/ErrorMessage";
 import Skeletn from "../Skeletn/Skeletn";
 import { Link } from "react-router-dom";
+import { Transition } from "react-transition-group";
+import { transitionStyles } from "../../styles/transitionStyles";
 
 
 const CharInfo = ({selectedChar}) => {
@@ -21,12 +23,20 @@ const CharInfo = ({selectedChar}) => {
     const content = !(loadSpinner || errorMessage || !char) ? <CharInfoView {...char}/> : null;
 
     return (
-        <div className="char__info">
-            {skeletn}
-            {errorMessage}
-            {loadSpinner}
-            {content}
-        </div>
+        <Transition in={isLoaded} timeout={500} >
+            {state =>         
+                <div 
+                className="char__info"
+                style = {{
+                    ...transitionStyles[state]
+                }}>
+                    {skeletn}
+                    {errorMessage}
+                    {loadSpinner}
+                    {content}
+                </div>}
+        </Transition>
+
     )
 }
 

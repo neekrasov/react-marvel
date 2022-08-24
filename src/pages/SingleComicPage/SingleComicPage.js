@@ -1,5 +1,5 @@
 import './SingleComicPage.sass';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { useMarvelAPI } from '../../services/api/MarvelAPI';
 import LoadSpinner from '../../components/LoadSpinner/LoadSpinner';
@@ -40,7 +40,8 @@ const SingleComicPageView = ({title, description, pageCount, language, price, th
                 <p className="single-comic__descr">Language: {language}</p>
                 <div className="single-comic__price">{price}</div>
             </div>
-            <a href="/#" className="single-comic__back">Back to all</a>
+            <Link to="/comics/" className="button button__main">
+                <div className='inner'>Back to all</div></Link>
         </div>
     )
 }
