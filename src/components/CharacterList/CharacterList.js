@@ -28,7 +28,8 @@ const CharList = ({filterCharacters, setFilterCharacters,  onCharSelected, scrol
                 setLastCharacterStatus(true);
                 return;
             }
-            setChars([...chars, ...result]);
+            setChars([...chars.filter((item) => item.id !== filterCharacters[0]?.id), ...result]);
+            setFilterCharacters([]);
             setDataOffset(dataOffset + 9);
             setDataUploadStatus(false);
         })

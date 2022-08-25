@@ -10,7 +10,7 @@ import { transitionStyles } from '../../styles/transitionStyles';
 const RandomChar = ({setScrollRef}) => {
     const ref = useRef();
     const [char, setChar] = useState(null);
-    const {isLoaded, isError, getCharacter, clearError} = useMarvelAPI();
+    const {isLoaded, isError, getAllCharacters, clearError} = useMarvelAPI();
 
     useEffect(()=>{
         clearError();
@@ -18,7 +18,7 @@ const RandomChar = ({setScrollRef}) => {
         setScrollRef(ref);
     }, [])
 
-    const setRandomChar = () => getCharacter(Math.floor(Math.random() * (1011334 - 1009742) + 1009742)).then(char=>setChar(char));
+    const setRandomChar = () => getAllCharacters(Math.floor(Math.random() * 1500), 1).then(char=>setChar(char[0]));
     
     const loadSpinner = !isLoaded? <LoadSpinner/> : null;
     const errorMessage = isError? <ErrorMessage style ={{width: "550px", height: "260px"}}/>: null;
@@ -61,10 +61,9 @@ const RandomChar = ({setScrollRef}) => {
 const CharacterView = ({charPreview, charName, charDescription, homepageLink, wikiLink}) => {
     charDescription = (charDescription)? charDescription : 'Information about this character will be later!';
     charDescription = charDescription.length > 220?  charDescription.slice(0, 220)+"..." : charDescription;
-    let charPreviewStyle = charPreview === "http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg"? {objectFit: "contain"} : null
     return (
         <div className="randomchar__block">
-            <img src={charPreview} alt="Random character" className="randomchar__img" style={charPreviewStyle}/>
+            <img src={charPreview} alt="Random character" className="randomchar__img" style={{objectFit: "contain"}}/>
             <div className="randomchar__info">
                 <p className="randomchar__name">{charName}</p>
                 <p className="randomchar__descr">{charDescription}</p>

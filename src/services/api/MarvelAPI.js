@@ -4,7 +4,7 @@ export const useMarvelAPI = () => {
     const _apiBaseURL ='https://gateway.marvel.com:443/v1/public/';
     const _apiKey ='apikey=515c4f46b9ee3419f3020f0655af98bc';
 
-    const _limitBase ='limit=9&';
+    const _limitBase ='limit={}&';
     const _offsetBase = 'offset={}&';
 
     const _allCharactersURI = 'characters?';
@@ -42,8 +42,8 @@ export const useMarvelAPI = () => {
 
     const {isLoaded, isError, request, clearError} = useHttp();
 
-    const getAllCharacters = async (offset = 301) =>{
-        const response = await request(_apiBaseURL + _allCharactersURI + _limitBase + _offsetBase.replace('{}', offset)+ _apiKey);
+    const getAllCharacters = async (offset = 301, limit = 9) =>{
+        const response = await request(_apiBaseURL + _allCharactersURI + _limitBase.replace('{}', limit) + _offsetBase.replace('{}', offset)+ _apiKey);
         return response.data.results.map(_transformCharacterResponse);
     } 
     
@@ -53,8 +53,8 @@ export const useMarvelAPI = () => {
     }
 
     
-    const getAllComics= async (offset = 200) =>{
-        const response = await request(_apiBaseURL + _allComicsURI + _limitBase.replace(9, 8) + _offsetBase.replace('{}', offset)+ _apiKey);
+    const getAllComics= async (offset = 200, limit = 8) =>{
+        const response = await request(_apiBaseURL + _allComicsURI + _limitBase.replace('{}', limit) + _offsetBase.replace('{}', offset)+ _apiKey);
         return response.data.results.map(_transformComicsResponse);
     } 
     
