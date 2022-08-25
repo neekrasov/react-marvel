@@ -37,7 +37,7 @@ const CharList = ({filterCharacters, setFilterCharacters,  onCharSelected, scrol
     const loadButtonStyle = lastCharacter? {display: 'none'} : null
     const errorMessage = isError ? <ErrorMessage/> : null;
     const loadSpinner = !isLoaded &&  !dataUpload? <><li/><LoadSpinner/><li/></> : null;
-    const charListItems = chars.map((char) => <CharacterListItem onCharSelected = {onCharSelected} scrollRef = {scrollRef} key = {char.id} {...char} />);
+    const charListItems = chars.map((char) => <CharacterListItem onCharSelected = {onCharSelected} scrollRef = {scrollRef} key = {char.id} char = {char} />);
 
     return (
         <div className="char__list">
@@ -57,13 +57,13 @@ const CharList = ({filterCharacters, setFilterCharacters,  onCharSelected, scrol
     )
 }
 
-const CharacterListItem = ({scrollRef, onCharSelected, charPreview, charName, id}) => {
+const CharacterListItem = ({scrollRef, onCharSelected, char, id}) => {
     const [animationStatus, setAnimationStatus] = useState(false);
     const itemRef = useRef(null);
     setTimeout(()=> setAnimationStatus(true), 50);
     const scrollToRef = () => scrollRef.current.scrollIntoView();
     const setSelected = () => itemRef.current.focus();
-    let charPreviewStyle = charPreview === "http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg"? {objectFit: "contain"} : null;
+    let charPreviewStyle = char.charPreview === "http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg"? {objectFit: "contain"} : null;
 
     return (
         <Transition in={animationStatus} timeout={500}>
@@ -74,15 +74,15 @@ const CharacterListItem = ({scrollRef, onCharSelected, charPreview, charName, id
                         }} 
                         ref={itemRef} 
                         onClick={()=> {
-                            onCharSelected(id);
+                            onCharSelected(char);
                             setSelected();
                             scrollToRef();
                         }}
                         className={`char__item`}
                         tabIndex={0}>
 
-                        <img style = {charPreviewStyle} src={charPreview} alt="abyss"/>
-                        <div className="char__name">{charName}</div>
+                        <img style = {charPreviewStyle} src={char.charPreview} alt="abyss"/>
+                        <div className="char__name">{char.charName}</div>
                     </li>
         }                     
         </Transition>

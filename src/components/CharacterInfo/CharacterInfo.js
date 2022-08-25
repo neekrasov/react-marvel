@@ -1,8 +1,5 @@
-import { useEffect, useState} from "react";
-import {useMarvelAPI} from "../../services/api/MarvelAPI";
+import {useState} from "react";
 import './CharacterInfo.sass';
-import LoadSpinner from "../LoadSpinner/LoadSpinner";
-import ErrorMessage from "../ErrorMessage/ErrorMessage";
 import Skeletn from "../Skeletn/Skeletn";
 import { Link } from "react-router-dom";
 import { Transition } from "react-transition-group";
@@ -10,20 +7,13 @@ import { transitionStyles } from "../../styles/transitionStyles";
 
 
 const CharInfo = ({selectedChar}) => {
-    const [char, setChar] = useState(null);
-    const {isLoaded, isError, getCharacter} = useMarvelAPI();
-
-    useEffect(()=>{
-        getCharacter(selectedChar).then(result => setChar(result));
-    }, [selectedChar])
-
-    const errorMessage = isError && char? <ErrorMessage style ={{width: "370px", height: "260px"}}/> : null;
-    const loadSpinner = !isLoaded && char? <LoadSpinner/> : null;
-    const skeletn = loadSpinner || errorMessage || char ? null: <Skeletn/>;
-    const content = !(loadSpinner || errorMessage || !char) ? <CharInfoView {...char}/> : null;
+    const [animationStatus, setAnimationStatus] = useState(false);
+    setTimeout(()=> setAnimationStatus(true), 50);
+    const skeletn = selectedChar ? null: <Skeletn/>;
+    const content = selectedChar ? <CharInfoView {...selectedChar}/> : null;
 
     return (
-        <Transition in={isLoaded} timeout={500} >
+        <Transition in={animationStatus} timeout={500} >
             {state =>         
                 <div 
                 className="char__info"
@@ -31,8 +21,6 @@ const CharInfo = ({selectedChar}) => {
                     ...transitionStyles[state]
                 }}>
                     {skeletn}
-                    {errorMessage}
-                    {loadSpinner}
                     {content}
                 </div>}
         </Transition>
