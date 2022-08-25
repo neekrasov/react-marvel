@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { useMarvelAPI } from '../../services/api/MarvelAPI';
 import LoadSpinner from '../../components/LoadSpinner/LoadSpinner';
 import ErrorMessage from '../../components/ErrorMessage/ErrorMessage';
+import Helmet from 'react-helmet';
 
 export const SingleComicPage = () => {
     const [comic, setComic] = useState({});
@@ -20,6 +21,13 @@ export const SingleComicPage = () => {
 
     return (
         <>
+            <Helmet>
+                <meta
+                    name="description"
+                    content={`Information about the comic ${comic.title}`}
+                />
+                <title> {`${comic.title}`} </title>
+            </Helmet>
             {loadSpinner}
             {errorMessage}
             {contentComic}

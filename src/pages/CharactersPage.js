@@ -5,11 +5,19 @@ import CharacterInfo from "../components/CharacterInfo/CharacterInfo";
 import ironMan from '../img/iron-man.png';
 import captainMarvel from '../img/captain-marvel.png';
 import { useState } from "react";
+import Helmet from 'react-helmet';
 export const CharacterPage = () => {
     const [selectedChar, setSelectedChar] = useState(0)
     const [scrollRef, setScrollRef] = useState(null);
     return (
         <>
+            <Helmet>
+                <meta
+                    name="description"
+                    content="Basic information about the characters"
+                />
+                <title> Marvel information portal</title>
+            </Helmet>
             <CharacterRandom setScrollRef ={setScrollRef} />
             <div className="char__content">
                 <CharacterList onCharSelected = {setSelectedChar} scrollRef ={scrollRef}/>
