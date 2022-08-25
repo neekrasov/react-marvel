@@ -6,9 +6,11 @@ import ironMan from '../img/iron-man.png';
 import captainMarvel from '../img/captain-marvel.png';
 import { useState } from "react";
 import Helmet from 'react-helmet';
+import { CharacterSearchForm } from '../components/CharacterSearchForm/CharacterSearchForm';
 export const CharacterPage = () => {
     const [selectedChar, setSelectedChar] = useState(0)
     const [scrollRef, setScrollRef] = useState(null);
+    const [filterCharacters, setFilterCharacters] = useState([]);
     return (
         <>
             <Helmet>
@@ -20,8 +22,11 @@ export const CharacterPage = () => {
             </Helmet>
             <CharacterRandom setScrollRef ={setScrollRef} />
             <div className="char__content">
-                <CharacterList onCharSelected = {setSelectedChar} scrollRef ={scrollRef}/>
-                <CharacterInfo selectedChar = {selectedChar}/>
+                <CharacterList filterCharacters = {filterCharacters} setFilterCharacters = {setFilterCharacters} onCharSelected = {setSelectedChar} scrollRef ={scrollRef}/>
+                <div>
+                    <CharacterInfo selectedChar = {selectedChar}/>
+                    <CharacterSearchForm setFilterCharacters = {setFilterCharacters}/>
+                </div>
             </div>
             <img className="bg-decoration iron-man" src={ironMan} alt="iron-man"/>
             <img className="bg-decoration captain-marvel" src={captainMarvel} alt="captain-marvel"/>

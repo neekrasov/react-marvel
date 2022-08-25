@@ -13,6 +13,8 @@ export const useMarvelAPI = () => {
     const _allComicsURI = 'comics?';
     const _singleComicURI = `comics/{}?`;
 
+    const _filterByName = 'name={}&';
+
 
     const _transformCharacterResponse = (response) => {
         return {
@@ -61,6 +63,11 @@ export const useMarvelAPI = () => {
         return _transformComicsResponse(response.data.results[0]);
     }
 
-    return {isLoaded, isError, clearError, getCharacter, getAllCharacters, getAllComics, getComic};
+    const getCharactersByName = async (name) =>  {
+        const response = await request(_apiBaseURL + _allCharactersURI + _filterByName.replace('{}', name) +  _apiKey);
+        return response.data.results.map(_transformCharacterResponse);
+    }
+
+    return {isLoaded, isError, clearError, getCharacter, getAllCharacters, getAllComics, getComic, getCharactersByName};
 
 }

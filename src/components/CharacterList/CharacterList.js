@@ -6,14 +6,19 @@ import ErrorMessage from '../ErrorMessage/ErrorMessage';
 import LoadSpinner from '../LoadSpinner/LoadSpinner';
 import './CharacterList.sass';
 
-const CharList = ({onCharSelected, scrollRef}) => {
+const CharList = ({filterCharacters, setFilterCharacters,  onCharSelected, scrollRef}) => {
     const [chars, setChars] = useState([]);
     const {isLoaded, isError, getAllCharacters} = useMarvelAPI();
     const [dataUpload, setDataUploadStatus] = useState(false);
-    const [dataOffset, setDataOffset] = useState(301);
+    const [dataOffset, setDataOffset] = useState(303);
     const [lastCharacter, setLastCharacterStatus] = useState(false)
 
     useEffect(()=>onLoadCharacters(dataOffset, true), [])
+    useEffect(()=>{
+        if (filterCharacters.length !== 0 && !dataUpload){
+            setChars(filterCharacters);
+        };
+    }, [filterCharacters])
 
     const onLoadCharacters = (offset, init) => {
         init? setDataUploadStatus(false): setDataUploadStatus(true)
