@@ -1,0 +1,21 @@
+{
+  "files": {
+    "main.css": "/react-marvel/static/css/main.26b1065a.css",
+    "main.js": "/react-marvel/static/js/main.44652339.js",
+    "static/media/iron-man.png": "/react-marvel/static/media/iron-man.33b9bd46c0334a3aa70f.png",
+    "static/media/deadpool.png": "/react-marvel/static/media/deadpool.47fdbc10e952458cae37.png",
+    "static/media/captain-marvel.png": "/react-marvel/static/media/captain-marvel.31821aaa24c04978c921.png",
+    "static/media/error.gif": "/react-marvel/static/media/error.9e91258e7372072ff77f.gif",
+    "static/media/ep_naturalblack.webp": "/react-marvel/static/media/ep_naturalblack.86bfb3d72eea10d4d2c0.webp",
+    "static/media/mjolnir.png": "/react-marvel/static/media/mjolnir.61f31e1809f12183a524.png",
+    "static/media/avengers.png": "/react-marvel/static/media/avengers.4065c8f9c94e3d8b039a.png",
+    "static/media/avengers_logo.png": "/react-marvel/static/media/avengers_logo.9eaf219344d83362e830.png",
+    "index.html": "/react-marvel/index.html",
+    "main.26b1065a.css.map": "/react-marvel/static/css/main.26b1065a.css.map",
+    "main.44652339.js.map": "/react-marvel/static/js/main.44652339.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.26b1065a.css",
+    "static/js/main.44652339.js"
+  ]
+}
