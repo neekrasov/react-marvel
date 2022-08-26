@@ -12,9 +12,9 @@ const App = () => {
                 <Header/>
                 <main>
                     <Routes>
-                        <Route path='/' element={<CharacterPage/>}/>
-                        <Route path='comics' element={<ComicsPage/>}/> 
-                        <Route path='/comics/:comicID' element ={<SingleComicPage/>}/>
+                        <Route path='/react-marvel/' element={<CharacterPage/>}/>
+                        <Route path='/react-marvel/comics' element={<ComicsPage/>}/> 
+                        <Route path='/react-marvel/comics/:comicID' element ={<SingleComicPage/>}/>
                         <Route path='*' element = {<Page404/>}/>
                     </Routes>
                 </main>
