@@ -18,9 +18,9 @@ const AppHeader = () => {
 
             <nav className="app__menu">
                 <ul>
-                    <li><NavLink to="/" style={({isActive}) => isActive ? {color: "#9F0013"}: undefined}>Characters</NavLink></li>
+                    <li><NavLink to="/react-marvel/" style={({isActive}) => isActive ? {color: "#9F0013"}: undefined}>Characters</NavLink></li>
                     /
-                    <li><NavLink to="/comics" style={({isActive}) => isActive ? {color: "#9F0013"}: undefined}>Comics</NavLink></li>
+                    <li><NavLink to="/react-marvel/comics" style={({isActive}) => isActive ? {color: "#9F0013"}: undefined}>Comics</NavLink></li>
                 </ul>
             </nav>
         </header>
