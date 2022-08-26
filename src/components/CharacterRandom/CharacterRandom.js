@@ -27,19 +27,9 @@ const RandomChar = ({setScrollRef}) => {
 
     return (
             <div ref ={ref} className="randomchar">
-                <Transition in={isLoaded} timeout={500}>
-                    {state=> 
-                            <div
-                            style = {{
-                                ...transitionStyles[state]
-                            }}>
-                                {errorMessage}
-                                {loadSpinner}
-                                {characterView}
-                            </div>
-                    }
-                </Transition>
-
+                    {errorMessage}
+                    {loadSpinner}
+                    {characterView}
                 <div className="randomchar__static">
                     <p className="randomchar__title">
                         Random character for today!<br/>

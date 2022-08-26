@@ -9,9 +9,6 @@ import { transitionStyles } from "../../styles/transitionStyles";
 const CharInfo = ({selectedChar}) => {
     const [animationStatus, setAnimationStatus] = useState(false);
     setTimeout(()=> setAnimationStatus(true), 50);
-    const skeletn = selectedChar ? null: <Skeletn/>;
-    const content = selectedChar ? <CharInfoView {...selectedChar}/> : null;
-
     return (
         <Transition in={animationStatus} timeout={500} >
             {state =>         
@@ -20,8 +17,7 @@ const CharInfo = ({selectedChar}) => {
                 style = {{
                     ...transitionStyles[state]
                 }}>
-                    {skeletn}
-                    {content}
+                    {selectedChar ? <CharInfoView {...selectedChar}/> : <Skeletn/>}
                 </div>}
         </Transition>
 
@@ -29,11 +25,10 @@ const CharInfo = ({selectedChar}) => {
 }
 
 const CharInfoView = ({charName, charDescription, charPreview, homepageLink, wikiLink, comics}) =>{
-    let charPreviewStyle = charPreview === "http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg"? {objectFit: "contain"} : null
     return (
         <>
             <div className="char__basics">
-                <img src={charPreview} alt="abyss" style={charPreviewStyle}/>
+                <img src={charPreview} alt="abyss" style={{objectFit: "contain"}}/>
                 <div>
                     <div className="char__info-name">{charName}</div>
                     <div className="char__btns">
